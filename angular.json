@@ -30,6 +30,10 @@
               "src/assets"
             ],
             "styles": [
+              "node_modules/primeng/resources/themes/lara-light-blue/theme.css",
+              "node_modules/primeng/resources/primeng.min.css",
+              "node_modules/primeicons/primeicons.css",
+              "node_modules/primeflex/primeflex.css",
               "src/styles.scss"
             ],
             "scripts": []
@@ -95,10 +99,15 @@
             "styles": [
               "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [
+              "../node_modules/chart.js/dist/chart.js"
+            ]
           }
         }
       }
     }
+  },
+  "cli": {
+    "analytics": "28fc9abb-c660-4e1a-af73-6e450d1b1cdf"
   }
 }
