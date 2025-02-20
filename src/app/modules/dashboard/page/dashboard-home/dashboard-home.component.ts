@@ -3,7 +3,7 @@ import { ChartData, ChartOptions } from 'chart.js';
 import { MessageService } from 'primeng/api';
 import { Subject, takeUntil } from 'rxjs';
 import { GetAllProductsResponse } from 'src/app/models/interfaces/products/response/GetAllProductsResponse';
-import { ProductsDataTransferService } from 'src/app/services/products/products-data-transfer.service';
+import { ProductsDataTransferService } from 'src/app/shared/services/products/products-data-transfer.service';
 import { ProductsService } from './../../../../services/products/products.service';
 
 @Component({
