@@ -3,21 +3,21 @@ import { BehaviorSubject, map, take } from 'rxjs';
 import { GetAllProductsResponse } from 'src/app/models/interfaces/products/response/GetAllProductsResponse';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ProductsDataTransferService {
-  public productsDataEmitter$ = new BehaviorSubject<Array<GetAllProductsResponse> | null>(null);
+  public productsDataEmitter$ =
+    new BehaviorSubject<Array<GetAllProductsResponse> | null>(null);
   public productsDatas: Array<GetAllProductsResponse> = [];
-
 
   setProductsDatas(products: Array<GetAllProductsResponse>): void {
     if (products) {
       this.productsDataEmitter$.next(products);
-      this.getProductDatas();
+      this.getProductsDatas();
     }
   }
 
-  getProductDatas() {
+  getProductsDatas() {
     this.productsDataEmitter$
       .pipe(
         take(1),
@@ -28,8 +28,8 @@ export class ProductsDataTransferService {
           if (response) {
             this.productsDatas = response;
           }
-        }
-      })
+        },
+      });
     return this.productsDatas;
   }
 }
