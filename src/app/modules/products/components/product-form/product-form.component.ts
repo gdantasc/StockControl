@@ -9,6 +9,7 @@ import { GetCategoriesResponse } from 'src/app/models/interfaces/categories/resp
 import { EventAction } from 'src/app/models/interfaces/products/event/EventAction';
 import { CreatteProductRequest } from 'src/app/models/interfaces/products/request/CreateProductRequest';
 import { EditProductRequest } from 'src/app/models/interfaces/products/request/EditProductRequest';
+import { SaleProductRequest } from 'src/app/models/interfaces/products/request/SaleProductRequest';
 import { GetAllProductsResponse } from 'src/app/models/interfaces/products/response/GetAllProductsResponse';
 import { CategoriesService } from 'src/app/services/categories/categories.service';
 import { ProductsService } from 'src/app/services/products/products.service';
@@ -42,6 +43,8 @@ export class ProductFormComponent implements OnInit, OnDestroy {
     event: EventAction;
     productDatas: Array<GetAllProductsResponse>;
   }
+
+  public saleProductSelected!: GetAllProductsResponse;
   public productSelectedDatas!: GetAllProductsResponse;
   public productDatas!: Array<GetAllProductsResponse>;
   public renderDropdown = false;
@@ -49,6 +52,10 @@ export class ProductFormComponent implements OnInit, OnDestroy {
   public addProductAction = ProductEvent.ADD_PRODUCT_EVENT;
   public editProductAction = ProductEvent.EDIT_PRODUCT_EVENT;
   public saleProductAction = ProductEvent.SALE_PRODUCT_EVENT;
+  public saleProductForm = this.formBuilder.group({
+    amount: [0, Validators.required],
+    product_id: ['', Validators.required],
+  })
 
   constructor(
     private categoriesService: CategoriesService,
@@ -160,6 +167,43 @@ export class ProductFormComponent implements OnInit, OnDestroy {
     }
   }
 
+  handleSubmitSaleProduct(): void {
+    if (this.saleProductForm.value && this.saleProductForm.valid) {
+      const requestDatas: SaleProductRequest = {
+        amount: this.saleProductForm.value.amount as number,
+        product_id: this.saleProductForm.value.product_id as string
+      }
+
+      this.productService.saleProduct(requestDatas)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: (response) => {
+            if (response) {
+              this.saleProductForm.reset()
+              this.getProductDatas()
+              this.messageService.add({
+                severity: 'success',
+                summary: 'Sucesso!',
+                detail: 'Venda efetuada com sucesso!',
+                life: 2500
+              });
+
+              this.router.navigate(['/dashboard'])
+            }
+          }, error: (err) => {
+            console.log(err);
+            this.saleProductForm.reset()
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Erro!',
+              detail: 'Erro ao vender produto!',
+              life: 2500
+            });
+
+          }
+        })
+    }
+  }
   getProductSelectedDatas(productId: string): void {
     const allProducts = this.productAction?.productDatas;
 
